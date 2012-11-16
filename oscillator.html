@@ -1,0 +1,41 @@
+<html>
+  <body>
+    <div>
+      <button id="play">play</button>
+      <button id="stop">stop</button>
+    </div>
+
+    <div>
+      <select id="type">
+        <optgroup label="standard">
+          <option>SINE</option>
+          <option>SAWTOOTH</option>
+          <option>SQUARE</option>
+          <option>TRIANGLE</option>
+        </optgroup>
+        <optgroup label="wave table">
+          <option>NOISE</option>
+          <option>GUITAR_FUZZ</option>
+          <option>BASS</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div>
+      <label>
+        <input name="frequency" id="frequency" type="range" min="0" max="100000" step="10" value="440"/>
+        Frequency
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <input name="detune" id="detune" type="range" min="-4800" max="4800" step="10" value="0"/>
+        Detune
+      </label>
+    </div>
+
+    <script src="oscillator.js"></script>
+
+  </body>
+</html>
