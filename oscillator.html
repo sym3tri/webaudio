@@ -1,4 +1,16 @@
 <html>
+  <head>
+    <style>
+      #canvas-container {
+        width: 500px;
+        overflow: scroll;
+        border: solid 1px #666;
+      }
+      #osc-canvas {
+        display: block;
+      }
+    </style>
+  </head>
   <body>
     <div>
       <button id="play">play</button>
@@ -33,6 +45,10 @@
         <input name="detune" id="detune" type="range" min="-4800" max="4800" step="10" value="0"/>
         Detune
       </label>
+    </div>
+
+    <div id="canvas-container">
+      <canvas id="osc-canvas" width="2048" height="100"></canvas>
     </div>
 
     <script src="oscillator.js"></script>

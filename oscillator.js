@@ -2,11 +2,13 @@
 // http://chromium.googlecode.com/svn/trunk/samples/audio/wave-tables/
 
 var ctx = new webkitAudioContext(),
+    WAVETABLE_SIZE = 2048,
     playEl,
     stopEl,
     typeEl,
     freqEl,
     detuneEl,
+    canvasEl,
     osc,
     type,
     standardTypes = ['SINE', 'SAWTOOTH', 'SQUARE', 'TRIANGLE'],
@@ -51,6 +53,7 @@ function init() {
   typeEl = document.getElementById('type');
   freqEl = document.getElementById('frequency');
   detuneEl = document.getElementById('detune');
+  canvasEl = document.getElementById('osc-canvas');
   addListeners();
 }
 
@@ -63,13 +66,46 @@ function addListeners() {
 }
 
 function createWaveTableArray(normalArray) {
-  var a = new Float32Array(4096);
+  var a = new Float32Array(WAVETABLE_SIZE);
   a.set(normalArray);
   return a;
 }
 
+function drawWave(real, imag) {
+  var canvas = canvasEl.getContext('2d'),
+      width = WAVETABLE_SIZE,
+      height = 100,
+      multiplier = 1000,
+      middle = height / 2,
+      i,
+      len;
+
+  canvas.lineWidth = 1;
+  canvas.clearRect(0, 0, width, height);
+
+  canvas.beginPath();
+  canvas.moveTo(0, middle);
+  canvas.lineTo(width, middle);
+  canvas.strokeStyle = '#999';
+  canvas.stroke();
+
+  for (i = 0, len = real.length; i < len; i++) {
+    canvas.beginPath();
+    canvas.moveTo(i, middle);
+    canvas.lineTo(i, middle + (real[i]*multiplier));
+    canvas.strokeStyle = '#ff0000';
+    canvas.stroke();
+
+    canvas.beginPath();
+    canvas.moveTo(i, middle);
+    canvas.lineTo(i, middle + (imag[i]*multiplier));
+    canvas.strokeStyle = '#0000ff';
+    canvas.stroke();
+  }
+}
+
 function getEmptyArray() {
-  var size = 4096,
+  var size = WAVETABLE_SIZE,
       a = new Float32Array(size),
       i = size;
   while (i) {
@@ -81,6 +117,7 @@ function getEmptyArray() {
 
 function getWaveTable(type) {
   var params = waveTableTypes[type];
+  drawWave(params.getReal(), params.getImag());
   return ctx.createWaveTable(params.getReal(), params.getImag());
 }
 
@@ -111,6 +148,9 @@ function stop() {
 }
 
 function onParamChange() {
+  if (!osc) {
+    return;
+  }
   osc[this.name].value = this.value;
 }
 
